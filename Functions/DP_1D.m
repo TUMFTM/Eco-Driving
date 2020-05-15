@@ -1,5 +1,24 @@
 function [difference, Res] = DP_1D(Route, in, bounds, sim, c1, plottrue)
-%Find the optimal speed profile for a given time penalty
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: finds the optimal speed profile for a given time penalty
+% ------------
+% Input:    - Route: struct containing the route characteristics
+%           - in: struct containing all global constants
+%           - bounds: struct containing the route boundary conditions
+%           - sim: struct containting the new speed, distance step
+%           duration and energy consumption for all possible velocities and
+%           accelerations
+%           - c1: time penalty as double
+%           - plottrue: flag for plotting optimal speed profile as boolean
+% ------------
+% Output:   - difference: time difference with target time
+%           - Res: struct containing the resulting speed profile
+% ------------
 
 %% DP backward
 Cost{length(bounds.s)} = 0;

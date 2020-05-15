@@ -1,4 +1,24 @@
 function [l_tl, isred, isyellow, tgreen] = tl_scan(Route, in, bounds, s, t)
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: Determines state of upcoming traffic light
+% ------------
+% Input:    - Route: struct containing the route characteristics
+%           - in: struct containing all global constants
+%           - bounds: struct containing the route boundary conditions
+%           - s: distance from the start of the route as double
+%           - t: time since start of the route as double
+% ------------
+% Output:   - l_tl: distance to next traffic light as double
+%           - isred: flag if traffic light is red as boolean
+%           - isyellow: flag if traffic light is yellow as boolean
+%           - tgreen: time at which the upcoming traffic light switches to 
+%            green as double
+% ------------
 
 I_tl = find(Route.s_tl>=s,1); %Index of closest traffic light
 if isempty(I_tl) %If there are no more traffic lights ahead of the vehicle

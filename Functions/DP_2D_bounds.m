@@ -1,6 +1,20 @@
 function bounds = DP_2D_bounds(Route, in, bounds, plottrue)
-% This function calculates the time bound based on the speed bound, traffic
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: calculates the time bound based on the speed bound, traffic
 % light phases and stop durations
+% ------------
+% Input:    - Route: struct containing the route characteristics
+%           - in: struct containing all global constants
+%           - bounds: struct containing the 1D boundary conditions
+% ------------
+% Output:   - bounds: struct containing the 1D boundary conditions and the 
+% 2D boundary conditions
+% ------------ 
 
     %% Lower time bound
     v_avg = movmean(bounds.v,2); %Calculate average speed for time bound calculation

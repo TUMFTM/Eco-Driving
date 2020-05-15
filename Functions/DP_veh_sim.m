@@ -1,6 +1,21 @@
 function sim = DP_veh_sim(in, bounds)
-%For all points in the speed space, the acceleartion options are determined
-%and the resulting speed, duration and energy consumption are calculated
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: Determins the acceleration options for all points in the 
+% speed space and calculates the resulting speed, duration and energy 
+% consumption
+% ------------
+% Input:    - in: struct containing all global constants
+%           - bounds: struct containing the route boundary conditions
+% ------------
+% Output:   - sim: struct containting the new speed, distance step
+%           duration and energy consumption for all possible velocities and
+%           accelerations
+% ------------
 
 %% Simulate vehicle for speeds in vspace
 vset = linspace(0,max(bounds.v),in.v_res);

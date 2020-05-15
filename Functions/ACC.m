@@ -1,4 +1,27 @@
 function [s_new, t_new, v_new] = ACC(s1, t1, v1, s2, t2, v2, Route, in)
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: Adaptive cruise control function. Checks whether the planned 
+% new vehicle speed violates the inter-vehicle distance limits and returns 
+% corrected speed
+% ------------
+% Input:    - s1: initial distance as double
+%           - t1: initial time as double
+%           - v1: initial speed as double
+%           - s2: planned new distance as double
+%           - t2: planned new time as double
+%           - v2: planned new speed as double
+%           - Route: struct containing the speed of the leading vehicle
+%           - in: struct containing all global constants
+% ------------
+% Output:   - s_new: new distance as double
+%           - t_new: new time as double
+%           - v_new: new speed as double
+% ------------
 
 diff_smin = s_intervehicle(s1,t1,v1,v2(1),Route,in,'min');
 diff_smax = s_intervehicle(s1,t1,v1,v2(1),Route,in,'max');

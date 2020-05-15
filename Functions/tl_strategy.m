@@ -1,4 +1,25 @@
 function [s_new, t_new, v_new] = tl_strategy(s1, t1, v1, l_tl, in, isyellow, t_green)
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: Determines traffic light approach strategy
+% ------------
+% Input:    - s1: initial distance as double
+%           - t1: initial time as double
+%           - v1: initial speed as double
+%           - l_tl: distance to upcoming traffic light as double
+%           - in: struct containing all global constants
+%           - isyellow: flag if traffic light is yellow as boolean
+%           - tgreen: time at which the upcoming traffic light switches to 
+% ------------
+% Output:   - s_new: new distance as double
+%           - t_new: new time as double
+%           - v_new: new speed as double
+% ------------
+
 Froll = in.m*in.g*in.fr; %Rolling resistance [N]
 Fdrag = 0.5*in.rho*in.cw*in.A*v1^2; %Drag resistance [N]
 

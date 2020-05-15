@@ -1,3 +1,18 @@
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: Plots all papers in the paper
+% ------------
+% Definitions (optional): first column as ... second column as ...
+% ------------
+% Input:    - Saved results structs
+% ------------
+% Output:   - Paper plots
+% ------------
+
 clearvars
 close all
 clc
@@ -5,37 +20,36 @@ clc
 load('Route91_first3stops_Combustion_20200515_175734.mat')
 
 %% Boundary conditions
-DP_2D_bounds(Route, in, bounds_1D, true);
+DP_2D_bounds(Route, In, bounds_1D, true);
 set(gcf,'Units','Points','Position',[300 300 246 120])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Vector Fields no tl
 Route_dl_notl = Route_dl;
 Route_dl_notl.s_tl = [];
-in.v_res = 500;
-bounds_1D_notl = DP_1D_bounds(Route_dl_notl, in); 
-sim_notl = DP_veh_sim(in, bounds_1D_notl); %vehicle simulation
-c_dl_notl = DP_1D_timepenalty(Route_dl_notl,in, bounds_1D_notl, sim_notl); %find time penalty
-DP_1D(Route_dl_notl, in, bounds_1D_notl, sim_notl, c_dl_notl, true); %solve
+In.v_res = 500;
+bounds_1D_notl = DP_1D_bounds(Route_dl_notl, In); 
+sim_notl = DP_veh_sim(In, bounds_1D_notl); %vehicle simulation
+c_dl_notl = DP_1D_timepenalty(Route_dl_notl,In, bounds_1D_notl, sim_notl); %find time penalty
+DP_1D(Route_dl_notl, In, bounds_1D_notl, sim_notl, c_dl_notl, true); %solve
 xlim([0 371])
 set(gcf,'Units','Points','Position',[300 300 246 160])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Vector field with tl
-in.v_res = 100;
-sim = DP_veh_sim(in, bounds_1D); %vehicle simulation
-DP_1D(Route_dl, in, bounds_1D, sim, c_dl, true); %With traffic lights
+In.v_res = 100;
+sim = DP_veh_sim(In, bounds_1D); %vehicle simulation
+DP_1D(Route_dl, In, bounds_1D, sim, c_dl, true); %With traffic lights
 xlim([0 371])
 set(gcf,'Units','Points','Position',[300 300 246 160])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Traffic light approach strategy
-
 s_plot = -100:0;
-Froll = in.m*in.g*in.fr; %Rolling resistance [N]
+Froll = In.m*In.g*In.fr; %Rolling resistance [N]
 
-vdec = sqrt(-2*in.amax*s_plot); %max. deceleration speed
-vcoast = sqrt(-2*s_plot*Froll./(in.m-s_plot*in.rho*in.cw*in.A)); %Coasting speed
+vdec = sqrt(-2*In.amax*s_plot); %max. deceleration speed
+vcoast = sqrt(-2*s_plot*Froll./(In.m-s_plot*In.rho*In.cw*In.A)); %Coasting speed
 
 figure
 hold on
@@ -53,7 +67,6 @@ set(gcf,'Units','Points','Position',[300 300 246 130])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% strict
-
 figure
 hold on
 xlabel('Distance in meters')
@@ -127,9 +140,9 @@ set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% ds curves
 ds_plotter(Res_strict,Route,in_strict,true);
-ds_plotter(Res_relaxed, Route,in,true);
+ds_plotter(Res_relaxed, Route,In,true);
 ds_plotter(Res_strict_SPaT,Route,in_strict,true);
-ds_plotter(Res_relaxed_SPaT,Route,in,true);
+ds_plotter(Res_relaxed_SPaT,Route,In,true);
 
 %% Comparison
 clearvars

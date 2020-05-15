@@ -1,5 +1,28 @@
 function [diff, ds_leader, smin, smax] = s_intervehicle(s1,t1,v1,v2,Route,in,minmax)
-%Determine if the constraints are violated
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: calculates the inter-vehicle distance
+% ------------
+% Input:    - s1: initial distance as double
+%           - t1: initial time as double
+%           - v1: initial speed as double
+%           - v2: planned new speed as double
+%           - Route: struct containing the speed of the leading vehicle
+%           - in: struct containing all global constants
+%           - minmax: flag indicating if we are checking the minimum or
+%           maximum inter-vehicle distance
+% ------------
+% Output:   - diff: difference to maximum or minimum inter-vehicle distance
+%           as double
+%           - ds_leader: inter-vehicle distance as double
+%           - smin: minimum inter-vehicle distance as double
+%           - smax: maximum inter-vehicle distance as double
+% ------------
+
 s = s1+in.ds;
 t = t1+2*in.ds/(v1+v2);
 ds_leader = interp1(Route.t_measured,Route.s_measured,t)-s;

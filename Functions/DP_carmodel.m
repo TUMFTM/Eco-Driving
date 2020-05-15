@@ -1,4 +1,23 @@
 function [v2, dt, E, a] = DP_carmodel(v1, in, a_res)
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: calculates the new vehicle speeds, distance step durations,
+% energy consumption and acceleration options for a given speed and
+% number of accelerations
+% ------------
+% Input:    - v1: initial vehicle velocity as double
+%           - in: struct containing all global constants
+%           - a_res: required resolution of acceleration vector as int
+% ------------
+% Output:   - v2: new vehicle speeds as array
+%           - dt: distance step duration as array
+%           - E: energy consumption as array
+%           - a: acceleration options as array
+% ------------
 
 Froll = in.m*in.g*in.fr;
 cdrag = 0.5*in.rho*in.cw*in.A;

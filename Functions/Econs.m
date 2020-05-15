@@ -1,6 +1,21 @@
 function E_avg = Econs(t,v,in)
-%Calculate energy consumption based on speed over time and vehicle
-%parameters
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: calculates energy consumption based on speed over time and 
+% vehicle parameters
+% ------------
+% Input:    - t: time as array
+%           - v: speed as array
+%           - in: struct containing all global constants
+% ------------
+% Output:   - E_avg: average energy consumption as double
+% ------------
+
+
 
 Froll = in.m*in.g*in.fr;
 E = zeros(size(t));

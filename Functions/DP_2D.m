@@ -1,5 +1,23 @@
 function Res = DP_2D(Route, in, bounds, sim)
-%Find the optimal speed profile taking the time space into account
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: finds the optimal speed profile taking the time space into 
+% account
+% ------------
+% Input:    - Route: struct containing the route characteristics
+%           - in: struct containing all global constants
+%           - bounds: struct containing the route boundary conditions
+%           - sim: struct containting the new speed, distance step
+%           duration and energy consumption for all possible velocities and
+%           accelerations
+% ------------
+% Output:   - c_time: time penalty that results in the minimum difference
+% between the target time and the trip duration
+% ------------
 
 %% Permute sim results
 

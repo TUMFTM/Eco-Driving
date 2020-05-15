@@ -1,7 +1,19 @@
 function bounds = DP_1D_bounds(Route, in)
-% This function returns the speed bound over time based on the location of
+% Designed by: Olaf Teichert (FTM, Technical University of Munich)
+%-------------
+% Created on: 2020-02-24
+% ------------
+% Version: Matlab2020a
+%-------------
+% Description: returns the speed bound over time based on the location of
 % stops, traffic lights and acceleration limits. Additionally, the phase
 % changes of all traffic lights during the trip duration are calculated
+% ------------
+% Input:    - Route: struct containing the route characteristics
+%           - in: struct containing all global constants
+% ------------
+% Output:   - bounds: struct containing the route boundary conditions
+% ------------
 
 %% Generate distance vector and adjust location of stops and traffic lights
 bounds.s = 0:in.ds:Route.s_vlim(end);
