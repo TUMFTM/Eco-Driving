@@ -1,4 +1,4 @@
-function [difference, Res] = DP_1D(Route, in, bounds, sim, c1, plottrue)
+function [difference, Res] = DP_1D(Route, bounds, sim, c1, plottrue)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -19,6 +19,8 @@ function [difference, Res] = DP_1D(Route, in, bounds, sim, c1, plottrue)
 % Output:   - difference: time difference with target time
 %           - Res: struct containing the resulting speed profile
 % ------------
+
+global horizon ds v_res
 
 %% DP backward
 Cost{length(bounds.s)} = 0;
@@ -63,32 +65,32 @@ s = 0;
 for i = 1:length(bounds.s)-1
     
     %find distance to and phase of closest traffic light
-    [l_tl, isred, isyellow, t_green] = tl_scan(Route, in, bounds, s(end), t(end));
+    [l_tl, isred, isyellow, t_green] = tl_scan(Route, bounds, s(end), t(end));
     l_stop = bounds.s_stop(find(bounds.s_stop>s(end),1))-s(end);
     
     %determine speed at next point
-    if l_tl<=in.horizon && isred && l_tl<l_stop %traffic light in sight and is red and precedes the next stop
-        [s_new, t_new, v_new] = tl_strategy(s(end), t(end), v(end), l_tl, in, isyellow, t_green);
+    if l_tl<=horizon && isred && l_tl<l_stop %traffic light in sight and is red and precedes the next stop
+        [s_new, t_new, v_new] = tl_strategy(s(end), t(end), v(end), l_tl, isyellow, t_green);
     else %no traffic light in sight, or traffic light is green, or there is a stop before the traffic light
-        [v2set, dtset, Eset] =  DP_carmodel(v(end), in, in.a_res_FW);
+        [v2set, dtset, Eset] =  DP_carmodel(v(end));
                 
         if unique(v_space{i+1})==0
-            s_new = [s(end) s(end)] + in.ds;
-            t_new = t(end) + 2*in.ds/v(end) + [0 Route.t_stop(bounds.s_stop==bounds.s(i+1))];      
+            s_new = [s(end) s(end)] + ds;
+            t_new = t(end) + 2*ds/v(end) + [0 Route.t_stop(bounds.s_stop==bounds.s(i+1))];      
             v_new = [0 0];      
         else
             Cnext = interp1(v_space{i+1},Cost{i+1},v2set);
             Cset  = Cnext + Eset + c1*dtset;
             [~, Imin] = min(Cset);
             
-            s_new = s(end)+in.ds;
+            s_new = s(end)+ds;
             t_new = t(end)+dtset(Imin);
             v_new = v2set(Imin);
         end
     end
     
     if not(isempty(Route.s_measured)) %check leading vehicle constraint
-       [s_new, t_new, v_new] = ACC(s(end), t(end), v(end), s_new, t_new, v_new, Route, in);
+       [s_new, t_new, v_new] = ACC(s(end), t(end), v(end), s_new, t_new, v_new, Route);
     end
     
     s = [s s_new]; %#ok<AGROW>
@@ -112,13 +114,13 @@ if plottrue
     s_step = 10;
     I_vmax = find(bounds.v==max(bounds.v),1); %Find index of distance step that has all speed options
     v_steps = 20;
-    v_plot_tot = v_space{I_vmax}(ceil(linspace(1,in.v_res,v_steps)));
+    v_plot_tot = v_space{I_vmax}(ceil(linspace(1,v_res,v_steps)));
     for i = s_step:s_step:length(bounds.s)-s_step
         I_plot = (ismember(v_space{i},v_plot_tot));
         
         s_plot = (i-1)*ones(1,sum(I_plot));
         v_plot = v_space{i}(I_plot)*3.6;
-        ds_plot = s_step/2*in.ds*ones(1,sum(I_plot));
+        ds_plot = s_step/2*ds*ones(1,sum(I_plot));
         a_plot = a_opt{i}(I_plot)'; 
         
         h_acc = quiver(s_plot,v_plot,ds_plot,a_plot,0,'k');

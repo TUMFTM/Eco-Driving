@@ -1,4 +1,4 @@
-function bounds = DP_2D_bounds(Route, in, bounds, plottrue)
+function bounds = DP_2D_bounds(Route, bounds, plottrue)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -16,9 +16,11 @@ function bounds = DP_2D_bounds(Route, in, bounds, plottrue)
 % 2D boundary conditions
 % ------------ 
 
+    global ds t_res
+
     %% Lower time bound
     v_avg = movmean(bounds.v,2); %Calculate average speed for time bound calculation
-    t_lower = [0 cumsum(in.ds./v_avg(2:end))]; %Calculate lower time bound
+    t_lower = [0 cumsum(ds./v_avg(2:end))]; %Calculate lower time bound
     
     %% Adjust time bound for stops
     for i = 1:length(Route.s_stop) %Adjust for stops   
@@ -63,9 +65,9 @@ function bounds = DP_2D_bounds(Route, in, bounds, plottrue)
     end
     
     %% Create time space
-    bounds.t_space = zeros(length(bounds.s),in.t_res);
+    bounds.t_space = zeros(length(bounds.s),t_res);
     for i = 1:length(bounds.s)
-        bounds.t_space(i,:) = sort([linspace(t_lower(i),t_upper(i)-10,in.t_res-10) t_upper(i)-9:t_upper(i)]); %Extra points are added near upper boundary to avoid errors
+        bounds.t_space(i,:) = sort([linspace(t_lower(i),t_upper(i)-10,t_res-10) t_upper(i)-9:t_upper(i)]); %Extra points are added near upper boundary to avoid errors
     end    
  
     %% Plot

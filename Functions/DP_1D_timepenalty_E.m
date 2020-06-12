@@ -1,4 +1,4 @@
-function c_time = DP_1D_timepenalty_E(Route, in, bounds, sim)
+function c_time = DP_1D_timepenalty_E(Route, bounds, sim)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -20,14 +20,14 @@ function c_time = DP_1D_timepenalty_E(Route, in, bounds, sim)
 % between the target time and the trip duration
 % ------------
 
-f = @(c_time) Emin(Route, in, bounds, sim, c_time); % Transform into a function where c_time is the only variable
+f = @(c_time) Emin(Route, bounds, sim, c_time); % Transform into a function where c_time is the only variable
 options = optimset('Display','iter','TolX',10,'TolFun',1);
 c_time = fminsearch(f,1e5,options);
 
 end
 
-function E = Emin(Route, in, bounds, sim, c_time)
-[~, Res_mixed] = DP_1D(Route, in, bounds, sim, c_time, false);
-E = Econs(Res_mixed.t,Res_mixed.v,in);
+function E = Emin(Route, bounds, sim, c_time)
+[~, Res_mixed] = DP_1D(Route, bounds, sim, c_time, false);
+E = Econs(Res_mixed.t,Res_mixed.v);
 
 end

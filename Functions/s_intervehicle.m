@@ -1,4 +1,4 @@
-function [diff, ds_leader, smin, smax] = s_intervehicle(s1,t1,v1,v2,Route,in,minmax)
+function [diff, ds_leader, smin, smax] = s_intervehicle(s1,t1,v1,v2,Route,minmax)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -22,9 +22,10 @@ function [diff, ds_leader, smin, smax] = s_intervehicle(s1,t1,v1,v2,Route,in,min
 %           - smin: minimum inter-vehicle distance as double
 %           - smax: maximum inter-vehicle distance as double
 % ------------
+global amax tr ds strict
 
-s = s1+in.ds;
-t = t1+2*in.ds/(v1+v2);
+s = s1+ds;
+t = t1+2*ds/(v1+v2);
 ds_leader = interp1(Route.t_measured,Route.s_measured,t)-s;
 v_leader = interp1(Route.t_measured,Route.v_measured,t);
 if isnan(ds_leader) %If the time is larger than the measured time
@@ -32,14 +33,14 @@ if isnan(ds_leader) %If the time is larger than the measured time
     v_leader = 0; %standing still
 end
 
-smin = v2*in.tr+v2.*(v2-v_leader)/2/in.amax;
+smin = v2*tr+v2.*(v2-v_leader)/2/amax;
 smax = 10+v2+0.0825*v2^2;
 
 switch minmax
     case 'min'
         diff = ds_leader-smin;
     case 'max'
-        if in.strict
+        if strict
             diff = ds_leader-smax;
         else
             diff = -1;

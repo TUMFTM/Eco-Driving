@@ -1,4 +1,4 @@
-function sim = DP_veh_sim(in, bounds)
+function sim = DP_veh_sim(bounds)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -9,23 +9,24 @@ function sim = DP_veh_sim(in, bounds)
 % speed space and calculates the resulting speed, duration and energy 
 % consumption
 % ------------
-% Input:    - in: struct containing all global constants
-%           - bounds: struct containing the route boundary conditions
+% Input:    - bounds: struct containing the route boundary conditions
 % ------------
 % Output:   - sim: struct containting the new speed, distance step
 %           duration and energy consumption for all possible velocities and
 %           accelerations
 % ------------
 
-%% Simulate vehicle for speeds in vspace
-vset = linspace(0,max(bounds.v),in.v_res);
+global v_res a_res
 
-a = zeros(in.v_res-1,in.a_res);
-v2 = zeros(in.v_res-1,in.a_res);
-dt = zeros(in.v_res-1,in.a_res);
-E = zeros(in.v_res-1,in.a_res);
+%% Simulate vehicle for speeds in vspace
+vset = linspace(0,max(bounds.v),v_res);
+
+a = zeros(v_res-1,a_res);
+v2 = zeros(v_res-1,a_res);
+dt = zeros(v_res-1,a_res);
+E = zeros(v_res-1,a_res);
 for i = 1:length(vset)
-    [v2(i,:), dt(i,:), E(i,:), a(i,:)] =  DP_carmodel(vset(i),in, in.a_res);
+    [v2(i,:), dt(i,:), E(i,:), a(i,:)] =  DP_carmodel(vset(i));
 end
 
 sim.vspace.v = vset;
@@ -37,12 +38,12 @@ sim.vspace.E = E;
 %% Simulate vehicle for speeds on the speed boundary
 vset_bounds = unique(bounds.v);
 
-a = zeros(length(vset_bounds),in.a_res);
-v2 = zeros(length(vset_bounds),in.a_res);
-dt = zeros(length(vset_bounds),in.a_res);
-E = zeros(length(vset_bounds),in.a_res);
+a = zeros(length(vset_bounds),a_res);
+v2 = zeros(length(vset_bounds),a_res);
+dt = zeros(length(vset_bounds),a_res);
+E = zeros(length(vset_bounds),a_res);
 for i = 1:length(vset_bounds)
-    [v2(i,:), dt(i,:), E(i,:), a(i,:)] =  DP_carmodel(vset_bounds(i),in, in.a_res);
+    [v2(i,:), dt(i,:), E(i,:), a(i,:)] =  DP_carmodel(vset_bounds(i));
 end
 
 sim.bounds.v = vset_bounds;

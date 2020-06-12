@@ -1,4 +1,4 @@
-function [ds_max, eco_share] = ds_plotter(Res,Route,in,plottrue)
+function [sdiff_max, eco_share] = ds_plotter(Res,Route,plottrue)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -18,31 +18,33 @@ function [ds_max, eco_share] = ds_plotter(Res,Route,in,plottrue)
 %           constraints
 % ------------
 
-ds = interp1(Route.t_measured,Route.s_measured,Res.t)-Res.s;
+global lzero lcar ds
+
+sdiff = interp1(Route.t_measured,Route.s_measured,Res.t)-Res.s;
 smin = zeros(1,length(Res.t));
 smax = zeros(1,length(Res.t));
-smax(1) = in.lcar;
+smax(1) = lcar;
 for i = 2:length(Res.t)
-    [~, ~, smin(i), smax(i)] = s_intervehicle(Res.s(i-1),Res.t(i-1),Res.v(i-1),Res.v(i),Route,in,'min');
+    [~, ~, smin(i), smax(i)] = s_intervehicle(Res.s(i-1),Res.t(i-1),Res.v(i-1),Res.v(i),Route,'min');
 end
 
-ds_max = max(ds);
-if in.strict
-    I_eco = and(ds>smin*1.01,ds<smax*0.99);
+sdiff_max = max(sdiff);
+if strict
+    I_eco = and(sdiff>smin*1.01,sdiff<smax*0.99);
 else
-    I_eco = ds>smin*1.01;
+    I_eco = sdiff>smin*1.01;
 end
-eco_share = sum(I_eco)/length(ds);
+eco_share = sum(I_eco)/length(sdiff);
 
 if plottrue
     figure('Units','Points','Position',[300 300 225 130])
     set(gca,'FontSize',8,'FontName','Times New Roman')
     hold on
-    plot(Res.s,smin+in.lzero,'r--')
-    if in.strict
-        plot(Res.s,smax+in.lzero,'r--')
+    plot(Res.s,smin+lzero,'r--')
+    if strict
+        plot(Res.s,smax+lzero,'r--')
     end
-    plot(Res.s,ds+in.lzero,'k')
+    plot(Res.s,ds+lzero,'k')
 %     plot(Res.s(I_eco),ds(I_eco)+in.lzero,'*')
     xlabel('Distance in meters')
     ylabel('Inter-vehicle distance in meters')

@@ -1,4 +1,4 @@
-function [l_tl, isred, isyellow, tgreen] = tl_scan(Route, in, bounds, s, t)
+function [l_tl, isred, isyellow, tgreen] = tl_scan(Route, bounds, s, t)
 % Designed by: Olaf Teichert (FTM, Technical University of Munich)
 %-------------
 % Created on: 2020-02-24
@@ -19,6 +19,7 @@ function [l_tl, isred, isyellow, tgreen] = tl_scan(Route, in, bounds, s, t)
 %           - tgreen: time at which the upcoming traffic light switches to 
 %            green as double
 % ------------
+global t_yellow
 
 I_tl = find(Route.s_tl>=s,1); %Index of closest traffic light
 if isempty(I_tl) %If there are no more traffic lights ahead of the vehicle
@@ -35,7 +36,7 @@ else
     t_previousredswitch = bounds.t_redswitches{I_tl}(I_previousredswitch); %time of previous switch to red phase
     isred = t_previousredswitch>t_previousgreenswitch; %If the most recent switch was green to red, the tl is currently red
     
-    isyellow = (t-t_previousredswitch)<in.t_yellow; %determine if the phase is amber
+    isyellow = (t-t_previousredswitch)<t_yellow; %determine if the phase is amber
 
     tgreen =t_previousgreenswitch + Route.t_red(I_tl)+ Route.t_green(I_tl); %time at which the upcoming traffic light switches to green
 end
