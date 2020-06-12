@@ -18,7 +18,7 @@ function [sdiff_max, eco_share] = ds_plotter(Res,Route,plottrue)
 %           constraints
 % ------------
 
-global lzero lcar ds
+global lzero lcar strict
 
 sdiff = interp1(Route.t_measured,Route.s_measured,Res.t)-Res.s;
 smin = zeros(1,length(Res.t));
@@ -44,8 +44,7 @@ if plottrue
     if strict
         plot(Res.s,smax+lzero,'r--')
     end
-    plot(Res.s,ds+lzero,'k')
-%     plot(Res.s(I_eco),ds(I_eco)+in.lzero,'*')
+    plot(Res.s,sdiff+lzero,'k')
     xlabel('Distance in meters')
     ylabel('Inter-vehicle distance in meters')
     xlim([0 1239])

@@ -17,39 +17,40 @@ clearvars
 close all
 clc
 
-load('Route91_first3stops_Combustion_20200515_175734.mat')
+load('Route91_first3stops_20200612_145548.mat')
+global m fr A cw amax g rho v_res
 
 %% Boundary conditions
-DP_2D_bounds(Route, In, bounds_1D, true);
+DP_2D_bounds(Route, bounds_1D, true);
 set(gcf,'Units','Points','Position',[300 300 246 120])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Vector Fields no tl
 Route_dl_notl = Route_dl;
 Route_dl_notl.s_tl = [];
-In.v_res = 500;
-bounds_1D_notl = DP_1D_bounds(Route_dl_notl, In); 
-sim_notl = DP_veh_sim(In, bounds_1D_notl); %vehicle simulation
-c_dl_notl = DP_1D_timepenalty(Route_dl_notl,In, bounds_1D_notl, sim_notl); %find time penalty
-DP_1D(Route_dl_notl, In, bounds_1D_notl, sim_notl, c_dl_notl, true); %solve
+v_res = 500;
+bounds_1D_notl = DP_1D_bounds(Route_dl_notl); 
+sim_notl = DP_veh_sim(bounds_1D_notl); %vehicle simulation
+c_dl_notl = DP_1D_timepenalty(Route_dl_notl, bounds_1D_notl, sim_notl); %find time penalty
+DP_1D(Route_dl_notl, bounds_1D_notl, sim_notl, c_dl_notl, true); %solve
 xlim([0 371])
 set(gcf,'Units','Points','Position',[300 300 246 160])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Vector field with tl
-In.v_res = 100;
-sim = DP_veh_sim(In, bounds_1D); %vehicle simulation
-DP_1D(Route_dl, In, bounds_1D, sim, c_dl, true); %With traffic lights
+v_res = 100;
+sim = DP_veh_sim(bounds_1D); %vehicle simulation
+DP_1D(Route_dl, bounds_1D, sim, c_dl, true); %With traffic lights
 xlim([0 371])
 set(gcf,'Units','Points','Position',[300 300 246 160])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% Traffic light approach strategy
 s_plot = -100:0;
-Froll = In.m*In.g*In.fr; %Rolling resistance [N]
+Froll = m*g*fr; %Rolling resistance [N]
 
-vdec = sqrt(-2*In.amax*s_plot); %max. deceleration speed
-vcoast = sqrt(-2*s_plot*Froll./(In.m-s_plot*In.rho*In.cw*In.A)); %Coasting speed
+vdec = sqrt(-2*amax*s_plot); %max. deceleration speed
+vcoast = sqrt(-2*s_plot*Froll./(m-s_plot*rho*cw*A)); %Coasting speed
 
 figure
 hold on
@@ -139,10 +140,10 @@ set(gcf,'Units','Points','Position',[300 300 150 120])
 set(gca,'FontSize',8,'FontName','Times New Roman')
 
 %% ds curves
-ds_plotter(Res_strict,Route,in_strict,true);
-ds_plotter(Res_relaxed, Route,In,true);
-ds_plotter(Res_strict_SPaT,Route,in_strict,true);
-ds_plotter(Res_relaxed_SPaT,Route,In,true);
+ds_plotter(Res_strict,Route,true);
+ds_plotter(Res_relaxed, Route,true);
+ds_plotter(Res_strict_SPaT,Route,true);
+ds_plotter(Res_relaxed_SPaT,Route,true);
 
 %% Comparison
 clearvars

@@ -90,5 +90,5 @@ E_dl_SPaT       = Econs(Res_dl_SPaT.t,Res_dl_SPaT.v);
 [ds_max_tight_SPaT, eco_share_tight_SPaT] = ds_plotter(Res_strict_SPaT,Route,false);
 
 %% Save results
-filename = ['Results/' Route.name '_' In.powertrain '_' char(datetime('now','Format','yyyyMMdd_HHmmss')) '.mat'];
+filename = ['Results/' Route.name '_' char(datetime('now','Format','yyyyMMdd_HHmmss')) '.mat'];
 save(filename)
